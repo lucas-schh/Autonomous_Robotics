@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<launch>
+    <!-- <include file="$(find vrep_ros_teleop)/launch/teleop_mux.launch"/> -->
+    <node name="task_server" pkg="floor_nav" type="task_server" output="screen" >
+        <!-- After install -->
+        <!-- <param name="lib_path" value="$(find floor_nav)/tasks"/> -->
+        <!-- While developing -->
+        <param name="lib_path" value="$(find floor_nav)/../../devel/share/floor_nav/tasks"/>
+        <param name="auto_topic" value="/obstacle_avoidance/command_velocity"/>
+        <param name="base_frame" value="/base_link"/>
+        <param name="reference_frame" value="/odom"/>
+    </node>
+    <node pkg="nodelet" type="nodelet" name="dock_drive" args="load kobuki_auto_docking/AutoDockingNodelet /mobile_base_nodelet_manager">
+        <remap from="dock_drive/odom" to="/odom"/>
+        <remap from="dock_drive/core" to="/mobile_base/sensors/core"/>
+        <remap from="dock_drive/dock_ir" to="/mobile_base/sensors/dock_ir"/>
+        <remap from="dock_drive/motor_power" to="/mobile_base/commands/motor_power"/>
+        <remap from="dock_drive/velocity" to="/mobile_base/commands/velocity"/>
+    </node>
+
+</launch>
